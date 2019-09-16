@@ -1,7 +1,5 @@
 package com.jayhalani.popularmovies.model.movies;
 
-import android.arch.lifecycle.LiveData;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 

@@ -1,18 +1,19 @@
 package com.jayhalani.popularmovies.ui.fragments;
 
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
-import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.jayhalani.popularmovies.R;
 import com.jayhalani.popularmovies.adapters.MovieAdapter;
@@ -23,15 +24,16 @@ import com.jayhalani.popularmovies.utils.NetworkUtils;
 import com.jayhalani.popularmovies.viewmodels.SortByViewModel;
 
 import java.util.List;
+import java.util.Objects;
 
 public class TopRatedFragment extends Fragment implements MovieAdapter.MovieAdapterOnClickHandler {
-    public static final String MOVIE_RESULT_STATE = "movie_result_state";
-    FragmentTopRatedBinding mBinding;
-    MovieAdapter.MovieAdapterOnClickHandler onClickHandler;
-    MovieAdapter movieAdapter;
+    private static final String MOVIE_RESULT_STATE = "movie_result_state";
+    private FragmentTopRatedBinding mBinding;
+    private MovieAdapter.MovieAdapterOnClickHandler onClickHandler;
+    private MovieAdapter movieAdapter;
     private Toast mToast;
     private GridLayoutManager layoutManager;
-    
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -44,12 +46,12 @@ public class TopRatedFragment extends Fragment implements MovieAdapter.MovieAdap
         onClickHandler = this;
         return mBinding.getRoot();
     }
-    
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         movieAdapter = new MovieAdapter(this);
-    
+
         SortByViewModel sortByViewModel = ViewModelProviders
                 .of(this).get(SortByViewModel.class);
         sortByViewModel.getMovieResults().observe(this, new Observer<List<MovieResults>>() {
@@ -59,23 +61,23 @@ public class TopRatedFragment extends Fragment implements MovieAdapter.MovieAdap
                 mBinding.rvTopMovieList.setAdapter(movieAdapter);
             }
         });
-    
+
         if (savedInstanceState != null && savedInstanceState.containsKey(MOVIE_RESULT_STATE)) {
             layoutManager.onRestoreInstanceState(savedInstanceState
                     .getParcelable(MOVIE_RESULT_STATE));
         }
-        
+
     }
-    
+
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelable(MOVIE_RESULT_STATE, layoutManager.onSaveInstanceState());
     }
-    
+
     @Override
     public void OnItemClickListener(MovieResults movieResults) {
-        if (new NetworkUtils().isNetworkConnected(getActivity())) {
+        if (new NetworkUtils().isNetworkConnected(Objects.requireNonNull(getActivity()))) {
             Intent intent = new Intent(getActivity(), DetailsActivity.class);
             intent.putExtra("RESULT_DATA", movieResults);
             startActivity(intent);

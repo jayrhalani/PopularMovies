@@ -2,23 +2,24 @@ package com.jayhalani.popularmovies.ui.activities;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.AppBarLayout;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
+import androidx.recyclerview.widget.LinearLayoutManager;
+
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.material.appbar.AppBarLayout;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.jayhalani.popularmovies.R;
@@ -40,12 +41,12 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 public class DetailsActivity extends AppCompatActivity implements TrailerAdapter.TrailerOnClickListener {
-    
-    
+
+
     private static final String TAG = "DetailsActivity";
-    
+
     ActivityDetailsBinding mBinding;
-    
+
     TrailerAdapter trailerAdapter;
     MovieResults movieResult;
     Favorite favorite;
@@ -56,7 +57,7 @@ public class DetailsActivity extends AppCompatActivity implements TrailerAdapter
     private String trailerKey;
     FavDatabase mDatabase;
     private boolean isFavorite = false;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,27 +66,27 @@ public class DetailsActivity extends AppCompatActivity implements TrailerAdapter
         mDatabase = FavDatabase.getInstance(getApplicationContext());
         getDataFromIntent();
         handleCollapsingLayout();
-        
+
         //Setup ToolBar
         setSupportActionBar(mBinding.detailsInfoAppbarLayout.toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        
+
         // SetUp Trailer AndReview RecyclerView
         LinearLayoutManager trailerLayoutManager = new LinearLayoutManager(this);
         trailerLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         mBinding.detailsInfoTrailers.rvMovieTrailer.setLayoutManager(trailerLayoutManager);
         mBinding.detailsInfoTrailers.rvMovieTrailer.setHasFixedSize(true);
-        
+
         LinearLayoutManager reviewLayoutManager = new LinearLayoutManager(this);
         reviewLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         mBinding.detailsInfoReviews.rvMovieReview.setLayoutManager(reviewLayoutManager);
         mBinding.detailsInfoReviews.rvMovieReview.setHasFixedSize(true);
         setupRecyclerViews();
-        
+
     }
-    
+
     // Retrieve data from Intent
     private void getDataFromIntent() {
         Intent intent = getIntent();
@@ -99,30 +100,30 @@ public class DetailsActivity extends AppCompatActivity implements TrailerAdapter
                         movieResult.getPosterPath(), movieResult.getBackdropPath(),
                         movieResult.getVoteAverage(), movieResult.getVoteCount(),
                         movieResult.getOverview(), movieResult.getReleaseDate());
-                
+
                 movieId = movieResult.getId();
                 movieTitle = movieResult.getTitle();
                 voteAverageString = movieResult.getVoteAverage() + "%";
                 voteCountsString = movieResult.getVoteCount() + " votes";
-                
+
                 mBinding.detailsInfoTitle.tvDetailMovieTitle.setText(movieResult.getTitle());
                 mBinding.detailsInfoTitle.tvDetailMovieReleaseDate.setText(movieResult.getReleaseDate());
                 mBinding.detailsInfoTitle.tvDetailMovieVoteAverage.setText(voteAverageString);
                 mBinding.detailsInfoTitle.tvDetailMovieVoteCounts.setText(voteCountsString);
                 mBinding.detailsInfoSynopsis.tvDetailMovieSynopsisPlot.setText(movieResult.getOverview());
-                
+
                 Picasso.get().load(new NetworkUtils().builtImageUrl(movieResult.getBackdropPath(),
                         Constants.IMAGES_QUALITY_HIGH))
                         .placeholder(R.drawable.movie_backdrop_placeholder)
                         .into(mBinding.detailsInfoAppbarLayout.ivDetailMoviePoster);
-                
+
                 mBinding.detailsInfoAppbarLayout.ivDetailTrailerPlay.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         openTrailer(trailerKey, trailerUrl);
                     }
                 });
-                
+
             } else if (intent.hasExtra(Constants.FAVORITE_DATA)) {
                 favorite = (Favorite) intent.getSerializableExtra(Constants.FAVORITE_DATA);
                 movieResult = new MovieResults(favorite.getId(), favorite.getTitle(),
@@ -133,18 +134,18 @@ public class DetailsActivity extends AppCompatActivity implements TrailerAdapter
                 movieTitle = favorite.getTitle();
                 voteAverageString = favorite.getVoteAverage() + "%";
                 voteCountsString = favorite.getVoteCount() + " votes";
-                
+
                 mBinding.detailsInfoTitle.tvDetailMovieTitle.setText(favorite.getTitle());
                 mBinding.detailsInfoTitle.tvDetailMovieReleaseDate.setText(favorite.getReleaseDate());
                 mBinding.detailsInfoTitle.tvDetailMovieVoteAverage.setText(voteAverageString);
                 mBinding.detailsInfoTitle.tvDetailMovieVoteCounts.setText(voteCountsString);
                 mBinding.detailsInfoSynopsis.tvDetailMovieSynopsisPlot.setText(favorite.getOverview());
-                
+
                 Picasso.get().load(new NetworkUtils().builtImageUrl(favorite.getBackdropPath(),
                         Constants.IMAGES_QUALITY_HIGH))
                         .placeholder(R.drawable.movie_backdrop_placeholder)
                         .into(mBinding.detailsInfoAppbarLayout.ivDetailMoviePoster);
-                
+
                 mBinding.detailsInfoAppbarLayout.ivDetailTrailerPlay.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -154,15 +155,15 @@ public class DetailsActivity extends AppCompatActivity implements TrailerAdapter
             }
         }
     }
-    
-    
+
+
     // Handling Collapsing Layout
     private void handleCollapsingLayout() {
-        
+
         mBinding.detailsInfoAppbarLayout.appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             boolean isShow = true;
             int scrollRange = -1;
-            
+
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
                 if (scrollRange == -1) {
@@ -183,7 +184,7 @@ public class DetailsActivity extends AppCompatActivity implements TrailerAdapter
             }
         });
     }
-    
+
     // Trailer OnClickListener
     @Override
     public void OnItemClickListener(TrailerResult trailerResult) {
@@ -191,7 +192,7 @@ public class DetailsActivity extends AppCompatActivity implements TrailerAdapter
         String url = new NetworkUtils().buildYoutubeWebUrl(key);
         openTrailer(key, url);
     }
-    
+
     // Open Trailer in web or Youtube App
     private void openTrailer(String key, String url) {
         if (new NetworkUtils().isNetworkConnected(this)) {
@@ -214,10 +215,10 @@ public class DetailsActivity extends AppCompatActivity implements TrailerAdapter
             mToast.show();
         }
     }
-    
+
     // Retrieve key and generate Url for Trailer
     private void setupRecyclerViews() {
-        
+
         // Set data to Trailer recyclerView
         StringRequest trailerRequest = new StringRequest(
                 new NetworkUtils().buildUrlByMovieId(Constants.SORT_BY_VIDEOS, String.valueOf(movieId)),
@@ -250,7 +251,7 @@ public class DetailsActivity extends AppCompatActivity implements TrailerAdapter
         });
         RequestQueue trailerRequestQueue = Volley.newRequestQueue(this);
         trailerRequestQueue.add(trailerRequest);
-        
+
         // Set data to Review recyclerView
         StringRequest reviewsRequest = new StringRequest(
                 new NetworkUtils().buildUrlByMovieId(Constants.SORT_BY_REVIEWS, String.valueOf(movieId)),
@@ -276,11 +277,11 @@ public class DetailsActivity extends AppCompatActivity implements TrailerAdapter
                 Log.d(TAG, "onErrorResponse: " + error.toString());
             }
         });
-        
+
         RequestQueue reviewsRequestQueue = Volley.newRequestQueue(this);
         reviewsRequestQueue.add(reviewsRequest);
     }
-    
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -311,7 +312,7 @@ public class DetailsActivity extends AppCompatActivity implements TrailerAdapter
         }
         return super.onOptionsItemSelected(item);
     }
-    
+
     @Override
     public boolean onCreateOptionsMenu(final Menu menu) {
         getMenuInflater().inflate(R.menu.details_menu, menu);
@@ -331,6 +332,6 @@ public class DetailsActivity extends AppCompatActivity implements TrailerAdapter
         });
         return true;
     }
-    
+
 }
 

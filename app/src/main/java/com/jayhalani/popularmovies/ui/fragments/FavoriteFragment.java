@@ -1,17 +1,18 @@
 package com.jayhalani.popularmovies.ui.fragments;
 
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
-import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.jayhalani.popularmovies.R;
 import com.jayhalani.popularmovies.adapters.FavoriteAdapter;
@@ -26,11 +27,10 @@ import java.util.List;
 
 public class FavoriteFragment extends Fragment
         implements FavoriteAdapter.FavoriteAdapterOnClickHandler {
-    FragmentFavoriteBinding mBinding;
-    FavDatabase mDatabase;
-    FavoriteAdapter favoriteAdapter;
-    FavoriteAdapter.FavoriteAdapterOnClickHandler onClickHandler;
-    
+    private FragmentFavoriteBinding mBinding;
+    private FavoriteAdapter favoriteAdapter;
+    private FavoriteAdapter.FavoriteAdapterOnClickHandler onClickHandler;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -43,10 +43,10 @@ public class FavoriteFragment extends Fragment
         mBinding.rvFavMovieList.setHasFixedSize(true);
         favoriteAdapter = new FavoriteAdapter(getActivity(), onClickHandler);
         mBinding.rvFavMovieList.setAdapter(favoriteAdapter);
-        mDatabase = FavDatabase.getInstance(getContext());
+        FavDatabase mDatabase = FavDatabase.getInstance(getContext());
         return mBinding.getRoot();
     }
-    
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -58,7 +58,7 @@ public class FavoriteFragment extends Fragment
             }
         });
     }
-    
+
     @Override
     public void OnItemClickListener(Favorite favorite) {
         Intent intent = new Intent(getActivity(), DetailsActivity.class);

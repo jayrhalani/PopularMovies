@@ -15,9 +15,8 @@ App uses The Movie Database API. You have to enter your API key in order to run 
 * [ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel)
 
 ## Screenshots
-<img src="./art/screen0.png" width="35%">&ensp;<img src="./art/screen1.png" width="35%">
-<img src="./art/screen2.png" width="35%">&ensp;<img src="./art/screen3.png" width="35%">
-<img src="./art/screen4.png" width="35%">
+<img src="./art/screen0.png" width="33%"><img src="./art/screen1.png" width="33%"><img src="./art/screen2.png" width="33%">
+<img src="./art/screen3.png" width="33%"><img src="./art/screen4.png" width="33%">
 
 
 

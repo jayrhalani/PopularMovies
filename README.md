@@ -5,11 +5,11 @@ This is the second project in Udacity's Android Developer Nanodegree. The purpos
 App uses The Movie Database API. You have to enter your API key in order to run the app. You can create your own one very easy! https://www.themoviedb.org/account/signup?language=en-EN. When you get it, just set it here: "com.jayhalani.popularmovies.utils.Constants"
 
 ## Tech Specs
-- Language: Java
-- Pattern: MVVM
-- MinSdkVersion: 21
-- TargetSdkVersion: 29
-- Development Tool: Android Studio
+- <b>Language</b>: Java
+- <b>Pattern</b>: MVVM
+- <b>MinSdkVersion</b>: 21
+- <b>TargetSdkVersion</b>: 29
+- <b>Development Tool</b>: Android Studio
 
 
 ## Libraries Used
